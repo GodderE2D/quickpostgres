@@ -1,7 +1,7 @@
 name: NPM Publish (Release)
 on:
   release:
-    types: [pubished]
+    types: [published]
 jobs:
   npm-publish:
     runs-on: ubuntu-latest
