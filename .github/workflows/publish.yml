@@ -1,0 +1,42 @@
+name: NPM Publish (Release)
+on:
+  release:
+    types: [pubished]
+jobs:
+  npm-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.release.target_commitish }}
+
+      - name: Install Node 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: npm
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install dependencies
+        run: npm ci
+
+      - run: git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - run: git config --global user.name "github-actions"
+
+      - name: Run final tests
+        # npm run test is excluded here intentionally
+        run: npm run eslint && npm run prettier
+
+      - name: Version package
+        run: npm version ${{ github.event.release.tag_name }}
+
+      - name: Publish to NPM
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Push version changes to GitHub
+        run: 'git push -m "chore(Release): bump version to ${{ github.event.release.tag_name }} for release"'
+        env:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
