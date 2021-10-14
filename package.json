@@ -9,7 +9,8 @@
     "prettify": "prettier .",
     "prettier": "prettier --check .",
     "lint": "eslint .",
-    "test": "node tests/test.js"
+    "test": "node tests/test.js",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
