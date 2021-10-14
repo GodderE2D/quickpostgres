@@ -37,6 +37,6 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Push version changes to GitHub
-        run: 'git push -m "chore(Release): bump version to ${{ github.event.release.tag_name }} for release"'
+        run: git push
         env:
           github-token: ${{ secrets.GITHUB_TOKEN }}
