@@ -4,7 +4,7 @@ An easy, beginner-friendly [PostgreSQL](https://www.postgresql.org/) database wr
 
 ## Installation
 
-<!-- You can easily install quickpostgres using your preferred package manager.
+You can easily install quickpostgres using your preferred package manager.
 
 ```bash
 npm install quickpostgres
@@ -12,9 +12,7 @@ npm install quickpostgres
 yarn add quickpostgres
 # or
 pnpm add quickpostgres
-``` -->
-
-Not yet published.
+```
 
 ## Requirements
 

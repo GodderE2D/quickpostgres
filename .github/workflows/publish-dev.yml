@@ -22,7 +22,7 @@ jobs:
 
       - name: Run final tests
         # npm run test is excluded here intentionally
-        run: npm run eslint && npm run prettier
+        run: npm run lint && npm run prettier
 
       - name: Deprecate old versions
         run: npm deprecate quickpostgres@"~$(jq --raw-output '.version' package.json)" "no longer supported" || true
