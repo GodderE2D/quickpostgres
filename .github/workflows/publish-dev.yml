@@ -24,9 +24,14 @@ jobs:
         # npm run test is excluded here intentionally
         run: npm run lint && npm run prettier
 
+      - name: Deprecate old versions
+        run: 'npm deprecate quickpostgres@"$(npm show quickpostgres@dev version)" "no longer supported" || true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Publish
         run: |
-          npm version --git-tag-version=false $(jq --raw-output '.version' package.json)-$(date +%s)-$(git rev-parse --short HEAD)
+          npm version --git-tag-version=false $(jq --raw-output '.version' package.json)-dev.$(date +%s).$(git rev-parse --short HEAD)
           npm publish --tag dev || true
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
