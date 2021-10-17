@@ -30,8 +30,13 @@ class Test {
   }
 }
 
+db.on("ready", () => console.log("ℹ️ Database connected"));
+db.on("end", () => console.log("ℹ️ Database connection ended"));
+
 (async () => {
   await db.connect();
+
+  console.time("Time to test (excludes connection & end)");
 
   await db.set("users.0", {
     username: "Zero",
@@ -78,6 +83,8 @@ class Test {
 
   // Test 13
   new Test(await db.type("users.0.points")).test("number");
+
+  console.timeEnd("Time to test (excludes connection & end)");
 
   await db.drop();
   await db.end();

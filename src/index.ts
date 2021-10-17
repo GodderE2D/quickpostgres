@@ -1,3 +1,4 @@
+import EventEmitter from "events";
 import { Client as PgClient } from "pg";
 
 import add from "./methods/add";
@@ -41,20 +42,27 @@ export type Methods =
   | "all"
   | "type";
 
-export class Client {
+export class Client extends EventEmitter {
   protected dbUrl: string;
   protected options: ClientOptions | undefined;
-  protected client: PgClient;
   protected tableName: string | undefined;
+
+  /**
+   * The `pg` client instance for your database.
+   */
+
+  public client: PgClient;
 
   /**
    * Whether the database has been connected or not.
    * @see connect
    * @see end
    */
+
   public connected: boolean;
 
   constructor(dbUrl: string, options?: ClientOptions) {
+    super();
     this.dbUrl = dbUrl;
     this.options = options;
     this.tableName = options?.table ?? undefined;
@@ -64,23 +72,28 @@ export class Client {
 
   /**
    * Connects to the database specified when creating the client.
-   * @returns void
+   * @returns the client
    * @example await db.connect();
    */
 
   public async connect() {
     await this.client.connect();
     this.connected = true;
+    this.emit("ready", this);
+    return this;
   }
 
   /**
    * Ends the connection to the database specified when creating the client.
+   * @returns the client
    * @example await db.end();
    */
 
   public async end() {
     await this.client.end();
     this.connected = false;
+    this.emit("end", this);
+    return this;
   }
 
   /**
