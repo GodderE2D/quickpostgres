@@ -38,6 +38,8 @@ db.on("end", () => console.log("ℹ️ Database connection ended"));
 
   console.time("Time to test (excludes connection & end)");
 
+  await db.set("userInfo", { difficulty: "Easy" });
+
   await db.set("users.0", {
     username: "Zero",
     email: "zero@quickpostgres.com",

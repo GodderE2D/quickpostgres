@@ -27,7 +27,8 @@ export default async (db: Client, params: Params, options: Options) => {
   if (typeof fetched === "object" && params.ops.target) {
     params.data = JSON.parse(params.data);
     params.data = set(fetched, params.ops.target, params.data);
-  } else throw new TypeError("Cannot target a non-object.");
+  } else if (params.ops.target)
+    throw new TypeError("Cannot target a non-object.");
 
   // Stringify data
   if (typeof params.data != "string") params.data = JSON.stringify(params.data);
