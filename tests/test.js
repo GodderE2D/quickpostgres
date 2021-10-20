@@ -36,9 +36,7 @@ db.on("end", () => console.log("ℹ️ Database connection ended"));
 (async () => {
   await db.connect();
 
-  console.time("Time to test (excludes connection & end)");
-
-  await db.set("userInfo", { difficulty: "Easy" });
+  console.time("⏱ Time to test (excludes connection & end)");
 
   await db.set("users.0", {
     username: "Zero",
@@ -86,7 +84,11 @@ db.on("end", () => console.log("ℹ️ Database connection ended"));
   // Test 13
   new Test(await db.type("users.0.points")).test("number");
 
-  console.timeEnd("Time to test (excludes connection & end)");
+  await db.set("users.0", { username: "One" });
+  // Test 14
+  new Test(await db.get("users.0.username")).test("One");
+
+  console.timeEnd("⏱ Time to test (excludes connection & end)");
 
   await db.drop();
   await db.end();
