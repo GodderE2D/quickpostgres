@@ -21,9 +21,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - run: git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - run: git config --global user.name "github-actions"
-
       - name: Run final tests
         # npm run test is excluded here intentionally
         run: npm run lint && npm run prettier
