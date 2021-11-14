@@ -43,18 +43,36 @@ export type Methods =
   | "type";
 
 export class Client extends EventEmitter {
-  protected dbUrl: string;
-  protected options: ClientOptions | undefined;
-  protected tableName: string | undefined;
+  /**
+   * PostgreSQL database url
+   * @type {string}
+   */
+
+  public dbUrl: string;
 
   /**
-   * The `pg` client instance for your database.
+   * Client options
+   * @type {ClientOptions | undefined}
+   */
+
+  public options: ClientOptions | undefined;
+
+  /**
+   * Default table name to use
+   * @type {string | undefined}
+   */
+
+  tableName: string | undefined;
+
+  /**
+   * The `pg` client instance for your database
+   * @type {PgClient}
    */
 
   public client: PgClient;
 
   /**
-   * Whether the database has been connected or not.
+   * Whether the database has been connected or not
    * @see connect
    * @see end
    */
@@ -71,37 +89,51 @@ export class Client extends EventEmitter {
   }
 
   /**
-   * Connects to the database specified when creating the client.
-   * @returns the client
+   * Connects to the database
+   * @returns {Promise<Client>} the client
    * @example await db.connect();
    */
 
-  public async connect() {
+  public async connect(): Promise<Client> {
     await this.client.connect();
     this.connected = true;
+
+    /**
+     * Emitted when the database has been connected
+     * @event Client#ready
+     * @param {Client} client the client
+     */
+
     this.emit("ready", this);
     return this;
   }
 
   /**
-   * Ends the connection to the database specified when creating the client.
-   * @returns the client
+   * Ends the connection to the database
+   * @returns {Promise<Client>} the client
    * @example await db.end();
    */
 
-  public async end() {
+  public async end(): Promise<Client> {
     await this.client.end();
     this.connected = false;
+
+    /**
+     * Emitted when the database connection has been ended
+     * @event Client#end
+     * @param {Client} client the client
+     */
+
     this.emit("end", this);
     return this;
   }
 
   /**
-   * Fetches data from a key in the database.
-   * @param key any string as a key, allows dot notation
-   * @param options any options to be added to the request
-   * @returns the data requested
-   * @alias get
+   * Fetches data from a key in the database
+   * @param {string} key any string as a key, allows dot notation
+   * @param {Options} options any options to be added to the request
+   * @returns {Promise<any>} the data requested
+   * @alias Client#get
    * @example const data = await db.fetch("users.1234567890.inventory");
    */
 
@@ -111,25 +143,24 @@ export class Client extends EventEmitter {
   }
 
   /**
-   * Fetches data from a key in the database.
-   * @param key any string as a key, allows dot notation
-   * @param options any options to be added to the request
-   * @returns the data requested
-   * @alias get
+   * Fetches data from a key in the database
+   * @param {string} key any string as a key, allows dot notation
+   * @param {options} options any options to be added to the request
+   * @returns {Promise<any>} the data requested
+   * @alias Client#fetch
    * @example const data = await db.fetch("users.1234567890.inventory");
    */
 
   public async get(key: string, ops?: Options): Promise<any> {
-    if (!key) throw new TypeError("No key specified.");
-    return await this.arbitrate(fetch, { id: key, ops: ops || {} });
+    return await this.fetch(key, ops);
   }
 
   /**
-   * Sets new data based on a key in the database.
-   * @param key any string as a key, allows dot notation
+   * Sets new data based on a key in the database
+   * @param {string} key any string as a key, allows dot notation
    * @param value value of the data to be set
-   * @param options any options to be added to the request
-   * @returns the updated data
+   * @param {Options} options any options to be added to the request
+   * @returns {Promise<any>} the updated data
    * @example const data = await db.set("users.1234567890.level", 100);
    */
 
@@ -143,11 +174,11 @@ export class Client extends EventEmitter {
   }
 
   /**
-   * Adds a number to a key in the database. If no existing number, it will add to 0.
-   * @param key any string as a key, allows dot notation
+   * Adds a number to a key in the database. If no existing number, it will add to 0
+   * @param {string} key any string as a key, allows dot notation
    * @param value value to add
-   * @param options any options to be added to the request
-   * @returns the updated data
+   * @param {Options} options any options to be added to the request
+   * @returns {Promise<any>} the updated data
    * @example const data = await db.add("users.1234567890.level", 1);
    */
 
@@ -162,11 +193,11 @@ export class Client extends EventEmitter {
   }
 
   /**
-   * Subtracts a number to a key in the database. If no existing number, it will subtract to 0.
-   * @param key any string as a key, allows dot notation
+   * Subtracts a number to a key in the database. If no existing number, it will subtract to 0
+   * @param {string} key any string as a key, allows dot notation
    * @param value value to subtract
-   * @param options any options to be added to the request
-   * @returns the updated data
+   * @param {Options} options any options to be added to the request
+   * @returns {Promise<any>} the updated data
    * @example const data = await db.subtract("users.1234567890.level", 10);
    */
 
@@ -181,11 +212,11 @@ export class Client extends EventEmitter {
   }
 
   /**
-   * Push into an array in the database based on the key. If no existing array, it will create one.
-   * @param key any string as a key, allows dot notation
+   * Push into an array in the database based on the key. If no existing array, it will create one
+   * @param {string} key any string as a key, allows dot notation
    * @param value value to push
-   * @param options any options to be added to the request
-   * @returns the updated data
+   * @param {Options} options any options to be added to the request
+   * @returns {Promise<any>} the updated data
    * @example const data = await db.push("users.1234567890.inventory", "Slice of Cheese");
    */
 
@@ -201,24 +232,24 @@ export class Client extends EventEmitter {
   }
 
   /**
-   * Delete an object (or property) in the database.
-   * @param key any string as a key, allows dot notation
-   * @param options any options to be added to the request
-   * @returns `true` if success, if not found `false`
+   * Delete an object (or property) in the database
+   * @param {string} key any string as a key, allows dot notation
+   * @param {Options} options any options to be added to the request
+   * @returns {boolean} `true` if success, if not found `false`
    * @example await db.delete("users.1234567890");
    */
 
-  public async delete(key: string, ops?: Options): Promise<any> {
+  public async delete(key: string, ops?: Options): Promise<boolean> {
     if (!key) throw new TypeError("No key specified.");
     return await this.arbitrate(del, { id: key, ops: ops || {} });
   }
 
   /**
-   * Returns a boolean indicating whether an element with the specified key exists or not.
-   * @param key any string as a key, allows dot notation
-   * @param options any options to be added to the request
-   * @returns boolean
-   * @alias includes
+   * Returns a boolean indicating whether an element with the specified key exists or not
+   * @param {string} key any string as a key, allows dot notation
+   * @param {Options} options any options to be added to the request
+   * @returns {boolean} boolean
+   * @alias Client#includes
    * @example const data = await db.has("users.1234567890");
    */
 
@@ -229,23 +260,21 @@ export class Client extends EventEmitter {
 
   /**
    * Returns a boolean indicating whether an element with the specified key exists or not.
-   * @param key any string as a key, allows dot notation
-   * @param options any options to be added to the request
-   * @returns boolean
-   * @alias has
+   * @param {string} key any string as a key, allows dot notation
+   * @param {Options} options any options to be added to the request
+   * @returns {Promise<boolean>} boolean
+   * @alias Client#has
    * @example const data = await db.has("users.1234567890");
    */
 
   public async includes(key: string, ops?: Options): Promise<boolean> {
-    if (!key) throw new TypeError("No key specified.");
-    return await this.arbitrate(has, { id: key, ops: ops || {} });
+    return await this.has(key, ops);
   }
 
   /**
    * Deletes all rows from the entire active table.
    * Note: This does not delete the table itself. To delete the table itself along with the rows, use `drop()`.
-   * @returns amount of rows deleted
-   *
+   * @returns {Promise<number>} amount of rows deleted
    * @example const data = await db.clear();
    */
 
@@ -255,19 +284,19 @@ export class Client extends EventEmitter {
 
   /**
    * Deletes the entire active table.
-   * @returns void
+   * @returns {Promise<void>} void
    * @example await db.drop();
    */
 
-  public async drop() {
+  public async drop(): Promise<void> {
     return await this.arbitrate(drop, { ops: {} }, this.tableName);
   }
 
   /**
    * Fetches the entire active table
-   * @param options any options to be added to the request
-   * @returns entire table as an object
-   * @alias fetchAll
+   * @param {Options} options any options to be added to the request
+   * @returns {Promise<any>} entire table as an object
+   * @alias Client#fetchAll
    * @example const data = await db.all();
    */
 
@@ -277,9 +306,9 @@ export class Client extends EventEmitter {
 
   /**
    * Fetches the entire active table
-   * @param options any options to be added to the request
-   * @returns entire table as an object
-   * @alias all
+   * @param {Options} options any options to be added to the request
+   * @returns {Promise<any>} entire table as an object
+   * @alias Client#all
    * @example const data = await db.all();
    */
 
@@ -288,10 +317,10 @@ export class Client extends EventEmitter {
   }
 
   /**
-   * Used to get the type of the value.
-   * @param key any string as a key, allows dot notation
-   * @param options any options to be added to the request
-   * @returns type from `typeof`
+   * Used to get the type of the value
+   * @param {string} key any string as a key, allows dot notation
+   * @param {Options} options any options to be added to the request
+   * @returns {Promise<"bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined">} type from `typeof`
    */
 
   public async type(
@@ -310,6 +339,13 @@ export class Client extends EventEmitter {
     if (!key) throw new TypeError("No key specified.");
     return await this.arbitrate(type, { id: key, ops: ops || {} });
   }
+
+  /**
+   * @private Arbitrate
+   * @param {PgClient} client
+   * @param {Params} params
+   * @param {Options} options
+   */
 
   private async arbitrate(
     method: (client: PgClient, params: Params, ops: Options) => any,
