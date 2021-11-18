@@ -59,7 +59,7 @@ const db = new Client(dbUrl);
   await db.push("userInfo.items", "Sword");
   // => { difficulty: "Easy", items: ["Sword"] }
 
-  // Adding to a number (that doesn"t exist yet) in an object:
+  // Adding to a number (that doesn't exist yet) in an object:
   await db.add("userInfo.balance", 500);
   // => { difficulty: "Easy", items: ["Sword"], balance: 500 }
 
