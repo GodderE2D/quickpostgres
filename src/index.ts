@@ -46,6 +46,7 @@ export class Client extends EventEmitter {
   /**
    * PostgreSQL database url
    * @type {string}
+   * @readonly
    */
 
   readonly dbUrl: string;
@@ -53,6 +54,7 @@ export class Client extends EventEmitter {
   /**
    * Client options
    * @type {ClientOptions | undefined}
+   * @readonly
    */
 
   readonly options: ClientOptions | undefined;
@@ -62,7 +64,7 @@ export class Client extends EventEmitter {
    * @type {string | undefined}
    */
 
-  readonly tableName: string | undefined;
+  public tableName: string | undefined;
 
   /**
    * The `pg` client instance for your database
