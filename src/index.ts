@@ -48,21 +48,21 @@ export class Client extends EventEmitter {
    * @type {string}
    */
 
-  public dbUrl: string;
+  readonly dbUrl: string;
 
   /**
    * Client options
    * @type {ClientOptions | undefined}
    */
 
-  public options: ClientOptions | undefined;
+  readonly options: ClientOptions | undefined;
 
   /**
    * Default table name to use
    * @type {string | undefined}
    */
 
-  tableName: string | undefined;
+  readonly tableName: string | undefined;
 
   /**
    * The `pg` client instance for your database
