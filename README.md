@@ -1,5 +1,9 @@
 # [Quickpostgres](https://npmjs.com/package/quickpostgres)
 
+[![Test](https://github.com/GodderE2D/quickpostgres/actions/workflows/test.yml/badge.svg)](https://github.com/GodderE2D/quickpostgres/actions/workflows/test.yml)
+[![NPM Publish (Release)](https://github.com/GodderE2D/quickpostgres/actions/workflows/publish.yml/badge.svg)](https://github.com/GodderE2D/quickpostgres/actions/workflows/publish.yml)
+[![NPM Publish (Dev)](https://github.com/GodderE2D/quickpostgres/actions/workflows/publish-dev.yml/badge.svg)](https://github.com/GodderE2D/quickpostgres/actions/workflows/publish-dev.yml)
+
 An easy, beginner-friendly [PostgreSQL](https://www.postgresql.org/) database wrapper similar to [quick.db](https://github.com/lorencerri/quick.db).
 
 ## Features
@@ -85,6 +89,8 @@ For now, please use [GitHub discussions](https://github.com/GodderE2D/quickpostg
 I may consider opening a Discord support server soon, but this is not guranteed.
 
 ## Contributing
+
+You must adhere to the [code of conduct](https://github.com/GodderE2D/quickpostgres/blob/main/.github/CODE_OF_CONDUCT.md) when interacting within the quickpostgres repository.
 
 If you spot a bug or you have a feature request, please open a [GitHub issue](https://github.com/GodderE2D/quickpostgres/issues), or if you'd like to write some code, you can open a [pull request](https://github.com/GodderE2D/quickpostgres/pulls).
 
