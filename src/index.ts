@@ -79,7 +79,7 @@ export class Client extends EventEmitter {
    * @see end
    */
 
-  public connected: boolean;
+  readonly connected: boolean;
 
   constructor(dbUrl: string, options?: ClientOptions) {
     super();
@@ -97,6 +97,8 @@ export class Client extends EventEmitter {
    */
 
   public async connect(): Promise<Client> {
+    if (this.connected) throw new Error("Client has already been connected.");
+    
     await this.client.connect();
     this.connected = true;
 
@@ -117,6 +119,8 @@ export class Client extends EventEmitter {
    */
 
   public async end(): Promise<Client> {
+    if (!this.connected) throw new Error("Client has not been connected yet.");
+    
     await this.client.end();
     this.connected = false;
 
