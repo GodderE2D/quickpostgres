@@ -79,7 +79,7 @@ export class Client extends EventEmitter {
    * @see end
    */
 
-  readonly connected: boolean;
+  public connected: boolean;
 
   constructor(dbUrl: string, options?: ClientOptions) {
     super();
