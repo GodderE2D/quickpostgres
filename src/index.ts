@@ -98,7 +98,7 @@ export class Client extends EventEmitter {
 
   public async connect(): Promise<Client> {
     if (this.connected) throw new Error("Client has already been connected.");
-    
+
     await this.client.connect();
     this.connected = true;
 
@@ -120,7 +120,7 @@ export class Client extends EventEmitter {
 
   public async end(): Promise<Client> {
     if (!this.connected) throw new Error("Client has not been connected yet.");
-    
+
     await this.client.end();
     this.connected = false;
 
