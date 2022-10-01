@@ -88,6 +88,14 @@ db.on("end", () => console.log("ℹ️ Database connection ended"));
   // Test 14
   new Test(await db.get("users.0.username")).test("One");
 
+  // Test 15
+  try {
+    await db.set("users.0.points", Infinity);
+    new Test(false).test(false);
+  } catch {
+    new Test(true).test(true);
+  }
+
   console.timeEnd("⏱ Time to test (excludes connection & end)");
 
   await db.drop();
