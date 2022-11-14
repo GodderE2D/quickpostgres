@@ -34,9 +34,6 @@
     "url": "https://github.com/GodderE2D/quickpostgres/issues"
   },
   "homepage": "https://github.com/GodderE2D/quickpostgres#readme",
-  "publishConfig": {
-    "registry": "git://github.com/GodderE2D/quickpostgres.git"
-  },
   "dependencies": {
     "lodash": "^4.17.21",
     "pg": "^8.7.1"
